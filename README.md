@@ -1,10 +1,10 @@
-deep-microservices-root-null
-============================
+deep-microservices-root-vanilla
+===============================
 
 [Repository_Badges_Placeholder]
 
-deep-microservices-root-null is the fundamental building block used by cloud-native web applications
-built on top of [DEEP Framework](https://github.com/MitocGroup/deep-microservices-root-null).
+deep-microservices-root-vanilla is the fundamental building block used by cloud-native web applications
+built on top of [DEEP Framework](https://github.com/MitocGroup/deep-microservices-root-vanilla).
 This microservice provides the root structure of the application that is developed in plain JavaScript,
 without using any framework like AngularJS or ReactJS.
 
@@ -53,20 +53,20 @@ if it returns an HTTP error in the first couple of minutes.
 
 ## Developer Resources
 
-Building an application like deep-microservices-helloworld?
+Having questions related to deep-microservices-root-vanilla?
 
 - Ask questions: https://stackoverflow.com/questions/tagged/deep-framework
 - Chat with us: https://gitter.im/MitocGroup/deep-framework
-- Send messages: feedback@deep.mg
+- Send an email: feedback@deep.mg
 
-Interested in contributing to deep-microservices-helloworld?
+Interested in contributing to deep-microservices-root-vanilla?
 
-- Contributing: https://github.com/MitocGroup/deep-microservices-helloworld/blob/master/CONTRIBUTING.md
-- Issue tracker: https://github.com/MitocGroup/deep-microservices-helloworld/issues
-- Releases: https://github.com/MitocGroup/deep-microservices-helloworld/releases
-- Roadmap: https://github.com/MitocGroup/deep-microservices-helloworld/blob/master/ROADMAP.md
+- Contributing: https://github.com/MitocGroup/deep-microservices-root-vanilla/blob/master/CONTRIBUTING.md
+- Issue tracker: https://github.com/MitocGroup/deep-microservices-root-vanilla/issues
+- Releases: https://github.com/MitocGroup/deep-microservices-root-vanilla/releases
+- Roadmap: https://github.com/MitocGroup/deep-microservices-root-vanilla/blob/master/ROADMAP.md
 
-Examples of web applications built on top of DEEP Framework:
+Looking for web applications that uses (or are similar to) deep-microservices-root-vanilla?
 
 - Hello World: https://hello.deep.mg | https://github.com/MitocGroup/deep-microservices-helloworld
 - Todo App: https://todo.deep.mg | https://github.com/MitocGroup/deep-microservices-todo-app
