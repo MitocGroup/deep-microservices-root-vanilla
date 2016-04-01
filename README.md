@@ -11,7 +11,13 @@ that is developed in vanilla / plain JavaScript, without using any framework lik
 
 ## Getting Started
 
-### Step 1. Install Pre-requisites
+### Step 1. Pre-requisites
+
+- [x] [Create an Amazon Web Services account](https://www.youtube.com/watch?v=WviHsoz8yHk)
+- [x] [Configure AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
+- [x] [Get Started - Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [x] [Install nvm](https://github.com/creationix/nvm#install-script) and [use latest node v4](https://github.com/creationix/nvm#usage)
+- [ ] Install DEEP CLI, also known as `deepify`:
 
 ```bash
 npm install deepify -g
