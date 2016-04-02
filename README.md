@@ -1,7 +1,8 @@
 deep-microservices-root-vanilla
 ===============================
 
-[Repository_Badges_Placeholder]
+[![Build Status](https://travis-ci.org/MitocGroup/deep-microservices-root-vanilla.svg?branch=master)](https://travis-ci.org/MitocGroup/deep-microservices-root-vanilla)
+[![Codacy Badge](https://api.codacy.com/project/badge/coverage/ef7c8d169940408dbeb10c634c8b4259)](https://www.codacy.com/app/MitocGroup/deep-microservices-root-vanilla)
 
 deep-microservices-root-vanilla is the fundamental building block used by cloud-native web applications
 built on top of [DEEP Framework](https://github.com/MitocGroup/deep-framework) and
@@ -16,7 +17,8 @@ that is developed in vanilla / plain JavaScript, without using any framework lik
 - [x] [Create an Amazon Web Services account](https://www.youtube.com/watch?v=WviHsoz8yHk)
 - [x] [Configure AWS Command Line Interface](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html)
 - [x] [Get Started - Installing Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [x] [Install nvm](https://github.com/creationix/nvm#install-script) and [use latest node v4](https://github.com/creationix/nvm#usage)
+- [x] [JDK 8 and JRE 8 Installation Start Here](https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html)
+- [x] [Install nvm](https://github.com/creationix/nvm#install-script) and [use node v4.3+](https://github.com/creationix/nvm#usage)
 - [ ] Install DEEP CLI, also known as `deepify`:
 
 ```bash
@@ -34,9 +36,9 @@ inside Git Bash.
 deepify install github://MitocGroup/deep-microservices-helloworld ~/deep-microservices-helloworld
 ```
 
-> If you execute `mkdir ~/deep-microservices-helloworld && cd ~/deep-microservices-helloworld`
-before `deepify install ...`, in this case path parameter is optional and can be skipped (e.g. 
-`~/deep-microservices-helloworld`). It will assume current folder in all `deepify` commands.
+> Path parameter in all `deepify` commands is optional and if not specified, assumes current
+working directory. Therefore you can skip `~/deep-microservices-helloworld` by executing
+`mkdir ~/deep-microservices-helloworld && cd ~/deep-microservices-helloworld` before `deepify install`.
 
 ### Step 3. Run Microservice(s) in Development
 
@@ -56,6 +58,15 @@ deepify deploy ~/deep-microservices-helloworld
 > Amazon CloudFront distribution takes up to 20 minutes to provision, therefore don’t worry
 if it returns an HTTP error in the first couple of minutes.
 
+### Step 5. Remove Microservice(s) from Production
+
+```bash
+deepify undeploy ~/deep-microservices-helloworld
+```
+
+> Amazon CloudFront distribution takes up to 20 minutes to unprovision. That's why `deepify`
+command checks every 30 seconds if it's disabled and when successful, removes it from your account.
+
 
 ## Developer Resources
 
@@ -72,7 +83,7 @@ Interested in contributing to deep-microservices-root-vanilla?
 - Releases: https://github.com/MitocGroup/deep-microservices-root-vanilla/releases
 - Roadmap: https://github.com/MitocGroup/deep-microservices-root-vanilla/blob/master/ROADMAP.md
 
-Looking for web applications that uses (or are similar to) deep-microservices-root-vanilla?
+Looking for web applications that use (or are similar to) deep-microservices-root-vanilla?
 
 - Hello World: https://hello.deep.mg | https://github.com/MitocGroup/deep-microservices-helloworld
 - Todo App: https://todo.deep.mg | https://github.com/MitocGroup/deep-microservices-todo-app
