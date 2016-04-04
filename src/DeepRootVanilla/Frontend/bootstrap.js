@@ -8,7 +8,7 @@
     var viewElement = document.querySelector('[ui-view]');
 
     this.render = function (htmlString, viewObject) {
-      viewElement.innerHTML = Mustache.render(htmlString, viewObject || {});
+      return viewElement.innerHTML = Mustache.render(htmlString, viewObject || {});
     };
 
     this.renderView = function (viewPath, viewObject, callback) {
@@ -43,13 +43,11 @@
 
   kernel.bootstrap(function () {
     var bootstrapScripts = kernel.get('deep_frontend_bootstrap_vector');
-    var scripts = [];
-
-    bootstrapScripts.map(function (m) {
-      scripts.push(System.import(m).then(moduleInit));
+    var bootstrapPromises = bootstrapScripts.map(function(m) {
+      return System.import(m).then(moduleInit);
     });
 
-    Promise.all(scripts).then(function() {
+    Promise.all(bootstrapPromises).then(function() {
       kernel.get('router').init();
     });
   });
