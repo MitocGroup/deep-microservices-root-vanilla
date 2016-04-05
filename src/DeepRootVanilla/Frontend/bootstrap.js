@@ -1,54 +1,15 @@
 (function(framework) {
   'use strict';
 
-  var kernel = framework.Kernel;
+  function importScript(scriptPath) {
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = scriptPath;
 
-  kernel.container.register('router', Router);
-  kernel.container.register('templating', function() {
-    var viewElement = document.querySelector('[ui-view]');
-
-    this.render = function (htmlString, viewObject, callback) {
-      viewElement.innerHTML = Mustache.render(htmlString, viewObject || {});
-
-      if (typeof callback === 'function') {
-        callback(viewElement);
-      }
-    };
-
-    this.renderView = function (viewPath, viewObject, callback) {
-      var xhttp = new XMLHttpRequest();
-      var realPath = kernel.get('asset').locate(viewPath);
-
-      xhttp.onreadystatechange = function () {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          this.render(xhttp.responseText, viewObject, callback);
-        }
-      }.bind(this);
-
-      xhttp.open('GET', realPath, true);
-      xhttp.send();
-    };
-  });
-
-  function moduleInit(module) {
-    var router = kernel.get('router');
-    var moduleRoutes = module.routes || [];
-    
-    for (var routePath in moduleRoutes) {
-      if (moduleRoutes.hasOwnProperty(routePath)) {
-        router.on(routePath, moduleRoutes[routePath]);
-      }
-    }
+    document.body.appendChild(script);
   }
 
-  kernel.bootstrap(function () {
-    var bootstrapScripts = kernel.get('deep_frontend_bootstrap_vector');
-    var bootstrapPromises = bootstrapScripts.map(function(m) {
-      return System.import(m).then(moduleInit);
-    });
-
-    Promise.all(bootstrapPromises).then(function() {
-      kernel.get('router').init();
-    });
+  framework.Kernel.bootstrap(function () {
+    framework.Kernel.get('deep_frontend_bootstrap_vector').forEach(importScript);
   });
 })(DeepFramework);

@@ -4,42 +4,12 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <style>
-        .loading {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform:translateX(-50%) translateY(-50%);
-            -webkit-transform:translateX(-50%) translateY(-50%);
-        }
-
-        .loading img {
-            max-width: none
-        }
-
-        .faded-out {
-            opacity: 0 !important;
-        }
-    </style>
-
-    <deep-version/>
     <deep-deployId/>
     <deep-root-assets/>
-</head>
-<body>
-    <deep-gtm/>
-    <deep-config/>
-
-    <div ui-view>
-        <div class="loading">
-            <deep-loader/>
-        </div>
-    </div>
 
     <script src="/lib/deep-framework.js"></script>
-    <script src="/lib/mustache.min.js"></script>
-    <script src="/lib/director.min.js"></script>
-    <script src="/lib/system.js"></script>
     <script src="/bootstrap.js"></script>
+</head>
+<body>
 </body>
 </html>

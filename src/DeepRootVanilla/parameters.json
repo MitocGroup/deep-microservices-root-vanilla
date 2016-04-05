@@ -1,27 +1,5 @@
 {
   "frontend" : {},
   "backend" : {},
-  "globals": {
-    "version": {
-      "displayName": "Application version",
-      "type": "string",
-      "required": false,
-      "example": "1.2.3"
-    },
-    "pageLoader|src": {
-      "displayName": "Page loader source",
-      "type": "string",
-      "required": false,
-      "pattern": "^@[^:]+:(?:\\/?[\\w\\-\\d]+)+\\.(png|jpg|gif)$",
-      "default": "@deep-root-vanilla:img/loader.gif",
-      "example": "@deep-root-vanilla:img/loader.gif"
-    },
-    "pageLoader|alt": {
-      "displayName": "Page loader alternate text",
-      "type": "string",
-      "required": false,
-      "default": "Loading...",
-      "example": "Loading..."
-    }
-  }
+  "globals": {}
 }
