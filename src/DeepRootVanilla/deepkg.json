@@ -1,5 +1,5 @@
 {
-  "identifier": "deep-root-vanilla",
+  "identifier": "deep.root.vanilla",
   "name": "DeepRootVanilla",
   "description": "Manages root structure of a microservice based on plain js.",
   "version": "0.0.1",
