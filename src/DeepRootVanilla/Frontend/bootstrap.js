@@ -7,8 +7,12 @@
   kernel.container.register('templating', function() {
     var viewElement = document.querySelector('[ui-view]');
 
-    this.render = function (htmlString, viewObject) {
-      return viewElement.innerHTML = Mustache.render(htmlString, viewObject || {});
+    this.render = function (htmlString, viewObject, callback) {
+      viewElement.innerHTML = Mustache.render(htmlString, viewObject || {});
+
+      if (typeof callback === 'function') {
+        callback(viewElement);
+      }
     };
 
     this.renderView = function (viewPath, viewObject, callback) {
@@ -17,11 +21,7 @@
 
       xhttp.onreadystatechange = function () {
         if (xhttp.readyState == 4 && xhttp.status == 200) {
-          this.render(xhttp.responseText, viewObject);
-
-          if (typeof callback === 'function') {
-            callback();
-          }
+          this.render(xhttp.responseText, viewObject, callback);
         }
       }.bind(this);
 
