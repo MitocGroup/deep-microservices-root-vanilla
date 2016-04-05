@@ -6,10 +6,29 @@
 
     <deep-deployId/>
     <deep-root-assets/>
+    <deep-gtm/>
+    <deep-config/>
+
+    <style>
+        .loading {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform:translateX(-50%) translateY(-50%);
+            -webkit-transform:translateX(-50%) translateY(-50%);
+        }
+
+        .loading img {
+            max-width: none
+        }
+    </style>
 
     <script src="/lib/deep-framework.js"></script>
     <script src="/bootstrap.js"></script>
 </head>
 <body>
+    <div class="loading">
+        <deep-loader/>
+    </div>
 </body>
 </html>
