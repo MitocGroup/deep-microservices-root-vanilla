@@ -6,7 +6,7 @@
     script.type = 'text/javascript';
     script.src = scriptPath;
 
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   }
 
   framework.Kernel.bootstrap(function () {
