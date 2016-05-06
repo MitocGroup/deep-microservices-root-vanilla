@@ -1,0 +1,4 @@
+notifications:
+  # Send notifications to Slack
+  slack: mitocgroup:4ZPhXmOpgk5QK6bvZdhL9r2x
+
