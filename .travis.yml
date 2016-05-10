@@ -4,16 +4,12 @@ node_js:
   - '4.3'
   - '4.4'
 cache:
+  edge: true
   directories:
     - $(npm root -g)
     - node_modules
     - deep_modules
-    - $(npm config get prefix)/bin/deepify
-    - $(npm config get prefix)/bin/jspm
-    - $(npm config get prefix)/bin/karma
-    - $(npm config get prefix)/bin/_mocha
-    - $(npm config get prefix)/bin/istanbul
-    - $(npm config get prefix)/bin/protractor
+    - $(npm config get prefix)/bin
 branches:
   only:
     - master
@@ -29,4 +25,5 @@ env:
     - TEST_SUITE=backend
     - TEST_SUITE=frontend
 notifications:
-  slack: 'mitocgroup:4ZPhXmOpgk5QK6bvZdhL9r2x'
+  secure: 
+    O4o/BvUIm7xU9ieOwombGFinCdHdQFKGz2GtZrHZvvHJbb0nKYdXYMpWJcigDBPF1yfz6eiqeyTxTNETUOAmzAP/hjc5UxpqnLjit24y1zw0ObYx/8pltTVOpKksTPesONa6wjLXetNXZoO9uK3gpFdyHGo4qsk91Aw8D2hRL8YJLKsqPLQRGMreSgNORLEnN9EVsEgLlMw+vNvKys+BHAW/jILB6lq2IMX7+hMXapgrHWUY9kkGMJJfOY5Fk//e4thN6zw2u9Qr79ume9Uc8ev8YM1nnloHlPOfoQy1h3p1/bfgmzkNGkEIKSNKeFZnvDwRlwXVd4czwy3h3Hy+AAolKKvrQJQGzoQAYFC7VY46VmcMYtNJ1HpqNgY3zci4QzI+q24yEawDKL2JQkJndcuB6zFEO+om3Ng79CfGRdYbpv1jZFtxqCFN1quCUGcwgc7BlNxJay4KyKz3SjrsoxrohFG/t2x3dfPIoMG0i8fL5tQKu7WfNxO+w1WlZMHVL5bcF6rJEUfuZtt6OVCzc7v+6bqLjyIYMIWjSPh6zXx3XdrjNbn231l8VJ6QZN60DMtJ7JJURLGob952HunaFbzcf6JimA1D+W9x9d4Q6EJq+V6avm6GnmvylYdPj6nnb9K71xEbXlGA7Wnhlp4Lk+MRteX51aZvwighDob+bkU=
