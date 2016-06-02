@@ -1,0 +1,11 @@
+{
+  "appIdentifier": "dfhfgh56765756fghgf4645756",
+  "appName": "My Custom Root Vanilla App",
+  "env": "dev",
+  "awsAccountId": 123456789012,
+  "aws": {
+    "accessKeyId": "gfdgfd",
+    "secretAccessKey": "+gfdgfdgfdgfd/dEFpHV20ZxpQAkUqXwCSZBtZhCL",
+    "region": "us-west-2"
+  }
+}

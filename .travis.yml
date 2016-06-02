@@ -1,26 +1,33 @@
 language: node_js
-sudo: false
+sudo: required
 node_js:
   - '4.3'
-  - '4.4'
-  - '5.10'
-
+  - '6.2'
 cache:
+  edge: true
   directories:
     - $(npm root -g)
     - node_modules
     - deep_modules
-
+    - $(npm config get prefix)/bin
 branches:
   only:
     - master
     - dev
     - stage
     - test
-
 before_install:
   - cp bin/test/package.json .
-  - npm run prepare
-
 after_success:
   - npm run coverage
+env:
+  matrix:
+    - TEST_SUITE=backend
+    - TEST_SUITE=frontend
+  global:
+    - DEEP_NO_INTERACTION=1
+    - E2E_TESTING=none
+notifications:
+  slack:
+    secure: 
+      FAa5DUN6+IlsjF6/M8YdPUme11C4leK7S/8mG+ntgBgJyQ8qW4NAc3BJehjI6mUDUvJRHxCkSrROUD10xzZLnB6mcj2mnZb8CbLLhk06N1GFzOJ8sZeT5eegV6hDi8uq1QvwFOxOhYzm0EQaVSqgP7nkXQScyX9ZbpDbM4TWT+Z5dG2TNRclkKG7dOhSjwl9rb9Tkk70IytWW7GvqPQA24ii0jF5Q1bTSuENMHZsORZ2DwsxFEeIUuXiWxQxmCNE7nhUIQWCkvAshVLLUBKr2DjZSpS/AJ9BQGpdnhb7mL9tyTz/IZMe/j4/hYd27+6St3vOrZnI7NmpV4COcHJMLWdmtNVQEHUpzX4PzGXMDe/fDGfICvsZKoMPqtHMhUxpyI5OsFC+o5BTonMBH9iJ9PwAdoPD/kWkgjU8NW6KVX0lQWp/YSL2bRpFemftdVrX/EIPcpI5Le13WnBU6yk7TuGMqv4yEYlZCef60J/M8KN3qrD8qOIDNp26M9U59udpFG0dVEA56YjkCHN8jjjywt1iBb8AQYQrAtEAFp85RwZHcmh3/Z3g0D64oI3sx8+MWHiHOvfpt8JRie98betqxPHpdnU73Kzcn8O+W2CU61kXfquQvW/uD78lv2V4ku8Shf2QA+VBWBCqWihfJcKZHBum3AGlYtxTublJxRZ0S/I=
