@@ -5,11 +5,6 @@
     <link rel="icon" href="/img/favicon.ico" type="image/x-icon"/>
     <title>Title</title>
 
-    <deep-deploy-id/>
-    <deep-root-assets/>
-    <deep-gtm/>
-    <deep-config/>
-
     <style>
         .loading {
             position: absolute;
@@ -23,13 +18,21 @@
             max-width: none
         }
     </style>
-
-    <script src="/lib/deep-framework.js"></script>
-    <script src="/bootstrap.js"></script>
+    
+    <deep-favicon/>
+    <deep-version/>
+    <deep-deploy-id/>
+    <deep-root-assets/>
 </head>
 <body>
+    <deep-gtm/>
+    <deep-config/>
+    
     <div class="loading">
         <deep-loader/>
     </div>
+    
+    <script src="/lib/deep-framework.js"></script>
+    <script src="/bootstrap.js"></script>
 </body>
 </html>
