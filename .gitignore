@@ -104,10 +104,6 @@ build/Release
 # Debug log from npm
 npm-debug.log
 
-
-#####=== DEEP ===#####
-**/src/deep-root-*
-
 # Compiled libraries
 **/compile/
 **/lib.compiled/
@@ -134,4 +130,3 @@ _vars.sh
 /package.json
 **/.sass-cache/
 **/coverage/
-
