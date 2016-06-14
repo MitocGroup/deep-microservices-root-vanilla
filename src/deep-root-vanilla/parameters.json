@@ -16,14 +16,6 @@
       "default": "@deep-root-vanilla:img/favicon.ico",
       "example": "@deep-root-vanilla:img/favicon.ico"
     },
-    "storage|eventualConsistency|offloaderEndpoint": {
-      "displayName": "Eventual consistency offloading backend endpoint",
-      "type": "string",
-      "required": false,
-      "pattern": "^@[^:]+:[^:]+:[^:]+$",
-      "default": "@deep-root-vanilla:ddb-eventual-consistency:pool-queue",
-      "example": "@deep-root-vanilla:ddb-eventual-consistency:pool-queue"
-    },
     "pageLoader|src": {
       "displayName": "Page loader source",
       "type": "string",
