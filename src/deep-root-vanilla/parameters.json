@@ -65,6 +65,12 @@
       "required": false,
       "example": false
     },
+    "userPool|enabled": {
+      "displayName": "Enable Cognito User Pool Identity Provider?",
+      "type": "boolean",
+      "required": false,
+      "example": false
+    },
     "api|cache|enabled": {
       "displayName": "Enable API caching?",
       "type": "boolean",
