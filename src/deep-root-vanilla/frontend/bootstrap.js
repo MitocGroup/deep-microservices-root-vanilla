@@ -12,4 +12,4 @@
   framework.Kernel.bootstrap(function () {
     framework.Kernel.get('deep_frontend_bootstrap_vector').forEach(importScript);
   });
-})(DeepFramework);
+}(DeepFramework));

@@ -9,6 +9,10 @@ import fs from 'fs';
 import os from 'os';
 import fsExtra from 'fs-extra';
 import syncExec from 'sync-exec';
+import AWS from 'aws-sdk';
+import S3CoverageSynchronizer from './S3CoverageSynchronizer';
+import GitHubMsgPublisher from './GitHubMsgPublisher';
+import CoverageComparator from './CoverageComparator';
 
 /**
  *
@@ -16,7 +20,7 @@ import syncExec from 'sync-exec';
 export class GitDiffWalker {
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get TARGET_BRANCH() {
@@ -25,15 +29,17 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get CMD() {
-    return `git diff --name-only ${GitDiffWalker.TARGET_BRANCH}`;
+    return (process.env['PR_MERGE'] === 'true') ?
+      'git diff --name-only @~..@' :
+      `git diff --name-only ${GitDiffWalker.TARGET_BRANCH}`;
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get NONE() {
@@ -41,7 +47,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get FULL_CI_RUN() {
@@ -49,7 +55,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get SRC() {
@@ -57,7 +63,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get FRONTEND_MICROAPP_PATHS() {
@@ -65,7 +71,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get BACKEND_MICROAPP_PATHS() {
@@ -73,7 +79,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get BACKEND_MICROAPP_IDENTIFIERS() {
@@ -81,7 +87,23 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
+   * @constructor
+   */
+  static get CI_FULL() {
+    return 'CI_FULL';
+  }
+
+  /**
+   * @returns {String}
+   * @constructor
+   */
+  static get IS_SKIP_TESTS() {
+    return 'IS_SKIP_TESTS';
+  }
+
+  /**
+   * @returns {String}
    * @constructor
    */
   static get DEEPKG_JSON() {
@@ -89,19 +111,19 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get CWD() {
-    return path.join(__dirname, '../..');
+    return path.join(__dirname, '../../..');
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get VARS_SHELL_PATH() {
-    return path.join(__dirname, '_vars.sh');
+    return path.join(__dirname, '../_vars.sh');
   }
 
   static removeDuplicates() {
@@ -122,7 +144,7 @@ export class GitDiffWalker {
   }
 
   /**
-   * @returns {string}
+   * @returns {String}
    * @constructor
    */
   static get TEST_PATHS_TPL() {
@@ -133,6 +155,8 @@ export class GitDiffWalker {
     content.push(`${GitDiffWalker.FRONTEND_MICROAPP_PATHS}="{frontendMicroAppPaths}"`);
     content.push(`${GitDiffWalker.BACKEND_MICROAPP_PATHS}="{backendMicroAppPaths}"`);
     content.push(`${GitDiffWalker.BACKEND_MICROAPP_IDENTIFIERS}="{backendMicroAppIdentifiers}"`);
+    content.push(`${GitDiffWalker.CI_FULL}="{ciFull}"`);
+    content.push(`${GitDiffWalker.IS_SKIP_TESTS}="{isSkipTests}"`);
     content.push('');
 
     return content.join(os.EOL);
@@ -163,9 +187,14 @@ export class GitDiffWalker {
       result.stdout.toString().trim();
   }
 
-  getAllMicroAppPath(srcpath) {
-    return fs.readdirSync(srcpath).filter(function (file) {
-      return GitDiffWalker.getFullPath(fs.statSync(path.join(srcpath, file)).isDirectory());
+  getAllMicroAppPath(srcPath) {
+
+    if (!CoverageComparator.accessSync(srcPath)) {
+      return [];
+    }
+
+    return fs.readdirSync(srcPath).filter(function (file) {
+      return GitDiffWalker.getFullPath(fs.statSync(path.join(srcPath, file)).isDirectory());
     });
   }
 
@@ -175,7 +204,7 @@ export class GitDiffWalker {
   constructor() {
     this._files = GitDiffWalker.getAllChangedFiles().split('\n');
 
-    this._allMicroAppPaths = this.getAllMicroAppPaths(path.join(__dirname, '../..', GitDiffWalker.SRC));
+    this._allMicroAppPaths = this.getAllMicroAppPaths(path.join(__dirname, '../../..', GitDiffWalker.SRC));
     this._allMicroAppIdentifiers = this.getAllMicroAppIdentifiers();
 
     this.getBackendMicroAppPaths();
@@ -196,16 +225,21 @@ export class GitDiffWalker {
    * @returns {String[]}
    */
   getFullPath(name) {
-    return path.join(__dirname, '../..', GitDiffWalker.SRC, name);
+    return path.join(__dirname, '../../..', GitDiffWalker.SRC, name);
   }
 
   /**
    * @param srcpath
    * @returns {String[]}
    */
-  getAllMicroAppPaths(srcpath) {
-    return fs.readdirSync(srcpath).filter((file) => {
-      return fs.statSync(path.join(srcpath, file)).isDirectory();
+  getAllMicroAppPaths(srcPath) {
+
+    if (!CoverageComparator.accessSync(srcPath)) {
+      return [];
+    }
+
+    return fs.readdirSync(srcPath).filter((file) => {
+      return fs.statSync(path.join(srcPath, file)).isDirectory();
     });
   }
 
@@ -218,9 +252,14 @@ export class GitDiffWalker {
 
     for (let microAppPath of this._allMicroAppPaths) {
 
-      console.log('microAppPath: ', this.getFullPath(microAppPath))
+      let microAppFullPath = this.getFullPath(microAppPath);
+
+      if (!CoverageComparator.accessSync(microAppFullPath)) {
+        continue;
+      }
+
       let content = fsExtra.readJsonSync(
-        path.join(this.getFullPath(microAppPath), GitDiffWalker.DEEPKG_JSON), {throws: false}
+        path.join(microAppFullPath, GitDiffWalker.DEEPKG_JSON), {throws: false}
       );
 
       indentifiers.push(content.identifier);
@@ -246,10 +285,40 @@ export class GitDiffWalker {
   }
 
   /**
+   * Check is full CI without for PR and !PR when coverage exists in S3
    * @returns {boolean}
    */
-  get isFullCIRun() {
-    return GitDiffWalker.commitMessage.indexOf(GitDiffWalker.FULL_CI_RUN) > -1;
+  static get isFullCIRunSync() {
+    return ((typeof process.env['MAJOR_VERSIONS'] !== 'undefined' &&
+    process.env['MAJOR_VERSIONS'].indexOf(GitDiffWalker.TARGET_BRANCH) > -1) ||
+    (typeof GitDiffWalker.commitMessage !== 'undefined' &&
+    GitDiffWalker.commitMessage.indexOf(GitDiffWalker.FULL_CI_RUN) > -1));
+  }
+
+  /**
+   * Returns as first argument in callback boolean result if is full ci
+   * @param {Function} callback
+   */
+  isFullCIRun(callback) {
+    if (GitHubMsgPublisher.isPullRequest) {
+      callback(GitDiffWalker.isFullCIRunSync);
+    } else {
+      let params = {
+        Bucket: S3CoverageSynchronizer.BUCKET_NAME,
+        Key: `${S3CoverageSynchronizer.REPORT_PREFIX}summary-report/coverage-summary.json`,
+      };
+
+      let s3 = new AWS.S3({});
+
+      s3.headObject(params, function (err) {
+        if (err) {
+          callback(true);
+        } else {
+          callback(GitDiffWalker.isFullCIRunSync);
+        }
+      });
+    }
+
   }
 
   /**
@@ -446,8 +515,14 @@ export class GitDiffWalker {
 
     for (let microAppPath of microAppPaths) {
 
+      let microAppFullPath = this.getFullPath(microAppPath);
+
+      if (!CoverageComparator.accessSync(microAppFullPath)) {
+        continue;
+      }
+
       let content = fsExtra.readJsonSync(
-        path.join(microAppPath, GitDiffWalker.DEEPKG_JSON), {throws: false}
+        path.join(microAppFullPath, GitDiffWalker.DEEPKG_JSON), {throws: false}
       );
 
       indentifiers.push(content.identifier);
@@ -522,45 +597,55 @@ export class GitDiffWalker {
     if (this.isBackendTestsChanged || this.isBackendCodeChanged) {
       backendMicroAppPaths = this.getBackendMicroAppNames();
 
-      frontendMicroAppPaths = (this.isBackendCodeChanged &&
-        typeof this._frontendMicroAppNames !== 'undefined' &&
-        this._frontendMicroAppNames.length > 0) ?
-        GitDiffWalker.removeDuplicates(this.getFrontendMicroAppNames(), this.getBackendCodeMicroAppNames()) :
-        this.getBackendCodeMicroAppNames();
+      //changes backend code and frontend, need to remove duplicates
+      if (this.isBackendCodeChanged && typeof this._frontendMicroAppNames !== 'undefined' &&
+        this._frontendMicroAppNames.length > 0) {
+        frontendMicroAppPaths = GitDiffWalker.removeDuplicates(
+          this.getFrontendMicroAppNames(), this.getBackendCodeMicroAppNames()
+        );
+      } else if (this.isBackendCodeChanged) {
+        frontendMicroAppPaths = this.getBackendCodeMicroAppNames();
+      }
 
       backendMicroAppIdentifiers = this.getBackendMicroAppIdentifiers();
     }
 
-    if(this.isFullCIRun) {
-      frontendMicroAppPaths = backendMicroAppPaths = this._allMicroAppPaths;
-      backendMicroAppIdentifiers = this._allMicroAppIdentifiers;
-    }
+    this.isFullCIRun((isFullCIRun) => {
 
-    let varsContent = GitDiffWalker.TEST_PATHS_TPL
-      .replace(/\{frontendMicroAppPaths\}/g, frontendMicroAppPaths)
-      .replace(/\{backendMicroAppPaths\}/g, backendMicroAppPaths)
-      .replace(/\{backendMicroAppIdentifiers\}/g, backendMicroAppIdentifiers);
+      if (isFullCIRun) {
+        frontendMicroAppPaths = backendMicroAppPaths = this._allMicroAppPaths;
+        backendMicroAppIdentifiers = this._allMicroAppIdentifiers;
+      }
 
-    fsExtra.writeFileSync(GitDiffWalker.VARS_SHELL_PATH, varsContent, 'utf8');
+      let varsContent = GitDiffWalker.TEST_PATHS_TPL
+        .replace(/\{frontendMicroAppPaths\}/g, frontendMicroAppPaths)
+        .replace(/\{backendMicroAppPaths\}/g, backendMicroAppPaths)
+        .replace(/\{backendMicroAppIdentifiers\}/g, backendMicroAppIdentifiers)
+        .replace(/\{ciFull\}/g, isFullCIRun)
+        .replace(/\{isSkipTests\}/g, `${this.isSkipTests && !isFullCIRun}`);
 
-    console.log("TRAVIS_COMMIT_MESSAGE: ", GitDiffWalker.commitMessage);
-    console.log(`isFullCIRun: ${this.isFullCIRun}`);
-    console.log(`isSkipTests: ${this.isSkipTests}`);
-    console.log(`isFrontedCodeChanged: ${this.isFrontedCodeChanged}`);
-    console.log(`isFrontendTestsChanged: ${this.isFrontendTestsChanged}`);
-    console.log(`isBackendCodeChanged: ${this.isBackendCodeChanged}`);
-    console.log(`isBackendTestsChanged: ${this.isBackendTestsChanged}`);
+      fsExtra.writeFileSync(GitDiffWalker.VARS_SHELL_PATH, varsContent, 'utf8');
 
-    console.log(`frontend paths: ${this.getFrontendMicroAppPaths()}`);
-    console.log(`frontend names: ${this.getFrontendMicroAppNames()}`);
+      console.log("TRAVIS_COMMIT_MESSAGE: ", GitDiffWalker.commitMessage);
+      console.log(`isFullCIRun: ${isFullCIRun}`);
+      console.log(`isSkipTests: ${this.isSkipTests && !isFullCIRun}`);
+      console.log(`isFrontedCodeChanged: ${this.isFrontedCodeChanged}`);
+      console.log(`isFrontendTestsChanged: ${this.isFrontendTestsChanged}`);
+      console.log(`isBackendCodeChanged: ${this.isBackendCodeChanged}`);
+      console.log(`isBackendTestsChanged: ${this.isBackendTestsChanged}`);
 
-    console.log(`backend all paths: ${this.getBackendMicroAppPaths()}`);
-    console.log(`backend tests paths: ${this.getBackendTestMicroAppPaths()}`);
-    console.log(`backend code paths: ${this.getBackendCodeMicroAppPaths()}`);
-    console.log(`backend identifiers: ${this.getBackendMicroAppIdentifiers()}`);
-    console.log(`backend all names: ${this.getBackendMicroAppNames()}`);
-    console.log(`backend tests names: ${this.getBackendTestMicroAppNames()}`);
-    console.log(`backend code names: ${this.getBackendCodeMicroAppNames()}`);
+      console.log(`frontend paths: ${this.getFrontendMicroAppPaths()}`);
+      console.log(`frontend names: ${this.getFrontendMicroAppNames()}`);
+
+      console.log(`backend all paths: ${this.getBackendMicroAppPaths()}`);
+      console.log(`backend tests paths: ${this.getBackendTestMicroAppPaths()}`);
+      console.log(`backend code paths: ${this.getBackendCodeMicroAppPaths()}`);
+      console.log(`backend identifiers: ${this.getBackendMicroAppIdentifiers()}`);
+      console.log(`backend all names: ${this.getBackendMicroAppNames()}`);
+      console.log(`backend tests names: ${this.getBackendTestMicroAppNames()}`);
+      console.log(`backend code names: ${this.getBackendCodeMicroAppNames()}`);
+
+    });
   }
 }
 
