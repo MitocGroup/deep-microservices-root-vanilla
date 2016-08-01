@@ -33,26 +33,26 @@ inside Git Bash.
 ### Step 2. Install Microservice(s) Locally
 
 ```bash
-deepify install github://MitocGroup/deep-microservices-root-vanilla ~/deep-microservices-root-vanilla
+deepify install github://MitocGroup/deep-microservices-helloworld ~/deep-microservices-helloworld
 ```
 
 > Path parameter in all `deepify` commands is optional and if not specified, assumes current
-working directory. Therefore you can skip `~/deep-microservices-root-vanilla` by executing
-`mkdir ~/deep-microservices-root-vanilla && cd ~/deep-microservices-root-vanilla` before `deepify install`.
+working directory. Therefore you can skip `~/deep-microservices-helloworld` by executing
+`mkdir ~/deep-microservices-helloworld && cd ~/deep-microservices-helloworld` before `deepify install`.
 
 ### Step 3. Run Microservice(s) in Development
 
 ```bash
-deepify server ~/deep-microservices-root-vanilla -o
+deepify server ~/deep-microservices-helloworld -o
 ```
 
 > When this step is finished, you can open in your browser the link *http://localhost:8000*
-and enjoy the deep-microservices-root-vanilla running locally.
+and enjoy the deep-microservices-helloworld running locally.
 
-### Step 4. Deploy Microservice(s) to Production
+### Step 4. Run Microservice(s) in Production
 
 ```bash
-deepify deploy ~/deep-microservices-root-vanilla
+deepify deploy ~/deep-microservices-helloworld
 ```
 
 > Amazon CloudFront distribution takes up to 20 minutes to provision, therefore don’t worry
@@ -61,7 +61,7 @@ if it returns an HTTP error in the first couple of minutes.
 ### Step 5. Remove Microservice(s) from Production
 
 ```bash
-deepify undeploy ~/deep-microservices-root-vanilla
+deepify undeploy ~/deep-microservices-helloworld
 ```
 
 > Amazon CloudFront distribution takes up to 20 minutes to unprovision. That's why `deepify`
@@ -86,7 +86,7 @@ Interested in contributing to deep-microservices-root-vanilla?
 Looking for web applications that use (or are similar to) deep-microservices-root-vanilla?
 
 - Hello World: https://hello.deep.mg | https://github.com/MitocGroup/deep-microservices-helloworld
-- Todo App: https://todo.deep.mg | https://github.com/MitocGroup/deep-microservices-todomvc
+- Todo App: https://todo.deep.mg | https://github.com/MitocGroup/deep-microservices-todo-app
 - Enterprise Software Marketplace: https://www.deep.mg
 
 

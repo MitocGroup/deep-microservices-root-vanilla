@@ -15,7 +15,7 @@ tmp/**/*
 *.min.js
 
 # DeepFramework
-deep-framework.js
+DeepFramework.js
 
 ## Directory-based project format:
 .idea/
@@ -40,6 +40,10 @@ deep-framework.js
 
 # Debug log from npm
 npm-debug.log
+
+
+#####=== DEEP ===#####
+**/src/deep-root-*
 
 # Compiled libraries
 **/compile/
