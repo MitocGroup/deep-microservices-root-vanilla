@@ -10,6 +10,7 @@ engines:
           mass_threshold: 140
     exclude_paths:
       - "**/tests"
+      - "deep-framework.js"
   eslint:
     enabled: true
     channel: "eslint-2"
