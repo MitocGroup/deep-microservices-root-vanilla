@@ -1,6 +1,7 @@
 bin/**/*
 test/**/*
 **/tests
+**/lib
 **/vendor
 tmp/**/*
 **.spec.js
@@ -68,5 +69,6 @@ deeploy.*.json
 **/frontend/_build/
 
 # Jspm config file
+config.core.js
 config.system.js
 config.test.js
