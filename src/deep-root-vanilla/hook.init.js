@@ -2,6 +2,8 @@
  * Created by AlexanderC on 10/6/15.
  */
 
+/* eslint global-require: 0 */
+
 'use strict';
 
 module.exports = function(callback) {
