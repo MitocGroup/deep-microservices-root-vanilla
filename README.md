@@ -2,7 +2,7 @@ deep-microservices-root-vanilla
 ===============================
 
 [![Build Status](https://travis-ci.org/MitocGroup/deep-microservices-root-vanilla.svg?branch=master)](https://travis-ci.org/MitocGroup/deep-microservices-root-vanilla)
-[![Test Coverage](https://codeclimate.com/repos/5789fe0f60cba5007800658b/badges/326a841f5de4a64b9019/coverage.svg)](https://codeclimate.com/repos/5789fe0f60cba5007800658b/coverage)
+[![Test Coverage](https://codeclimate.com/github/MitocGroup/deep-microservices-root-vanilla/badges/coverage.svg?maxAge=0)](https://codeclimate.com/github/MitocGroup/deep-microservices-root-vanilla)
 
 deep-microservices-root-vanilla is the fundamental building block used by cloud-native web applications
 built on top of [DEEP Framework](https://github.com/MitocGroup/deep-framework) and
